@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="js/main.js"></script>
+  <title>Онлакн калькулятор поможет расчитать сколько в месяц процентов годовых</title>
+  <meta name="keywords" content="это сколько, в месяц, процентов годовых, калькулятор, онлайн, это сколько годовых">
+  <meta name="description" content="Онлакн калькулятор поможет расчитать сколько в месяц процентов годовых.">
+</head>
+<body>
+  <div id="interestСalculator">
+    <div>
+      <h1><span>{{ percentPerAnnum }}</span> процентов годовых от <span>{{ amountOfDeposit }}</span>, это сколько будет в месяц?</h1>
+      <h4>
+        <span>{{ percentPerAnnum }}</span> процентов годовых это <span>{{ percentPerMonth }}</span> в месяц
+      </h4>
+    </div>
+    <table>
+      <tr>
+        <td>
+          <label for="">Сумма вклада:</label>
+        </td>
+        <td>
+          <input v-model="amountOfDeposit">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="">Годовой процент:</label>
+        </td>
+        <td>
+          <input v-model="percentPerAnnum">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="">Прибыль в месяц:</label>
+        </td>
+        <td>{{ profitPerMonth }}</td>
+      </tr>
+      <tr>
+        <td>
+          <label for="">Прибыль в год:</label>
+        </td>
+        <td>{{ profitPerYear }}</td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
