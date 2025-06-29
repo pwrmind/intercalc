@@ -1,52 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-  <title>Онлайн калькулятор поможет посчитать сколько в месяц процентов годовых</title>
-  <meta name="keywords" content="сколько процентов, это сколько, в месяц, процентов годовых, калькулятор, онлайн, это сколько годовых, вклад, проценты каждый месяц">
-  <meta name="description" content="Онлакн калькулятор поможет расчитать сколько в месяц процентов годовых.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <title>Калькулятор процентов по вкладу</title>
+  <meta name="description" content="Онлайн калькулятор для расчёта ежемесячных и годовых процентов по вкладу">
+  <meta name="keywords" content="калькулятор вкладов, расчёт процентов, проценты годовых, доход по вкладу, финансы">
+  <style>
+    :root {
+      --primary-color: #f5f5f5;    /* 60% - основной фон */
+      --secondary-color: #2c3e50;  /* 30% - контент */
+      --accent-color: #e74c3c;    /* 10% - акценты */
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+      line-height: 1.6;
+      padding: 20px;
+    }
+    
+    #interestCalculator {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .calculator-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+    
+    h4 {
+      font-size: 1.2rem;
+      font-weight: normal;
+      color: var(--accent-color);
+    }
+    
+    .input-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: var(--secondary-color);
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      transition: border 0.3s;
+    }
+    
+    input:focus {
+      border-color: var(--accent-color);
+      outline: none;
+    }
+    
+    .result {
+      padding: 15px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: var(--accent-color);
+    }
+    
+    .highlight {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+    
+    @media (max-width: 480px) {
+      #interestCalculator {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div id="interestСalculator">
-    <div>
-      <h1><span>{{ percentPerAnnum }}</span> процентов годовых от <span>{{ amountOfDeposit }}</span> ₽, это сколько будет в месяц?</h1>
+  <div id="interestCalculator">
+    <div class="calculator-header">
+      <h1>
+        <span class="highlight">{{ percentPerAnnum }}%</span> годовых от 
+        <span class="highlight">{{ formattedAmount }}</span> ₽
+      </h1>
       <h4>
-        <span>{{ percentPerAnnum }}</span> процентов годовых это <span>{{ percentPerMonth }}</span> в месяц
+        Ежемесячная ставка: <span class="highlight">{{ percentPerMonth }}%</span>
       </h4>
     </div>
-    <table>
-      <tr>
-        <td>
-          <label for="">Сумма вклада:</label>
-        </td>
-        <td>
-          <input v-model="amountOfDeposit">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="">Годовой процент:</label>
-        </td>
-        <td>
-          <input v-model="percentPerAnnum">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="">Прибыль в месяц:</label>
-        </td>
-        <td>{{ profitPerMonth }}</td>
-      </tr>
-      <tr>
-        <td>
-          <label for="">Прибыль в год:</label>
-        </td>
-        <td>{{ profitPerYear }}</td>
-      </tr>
-    </table>
+    
+    <div class="input-group">
+      <label for="depositAmount">Сумма вклада (₽):</label>
+      <input 
+        type="number" 
+        id="depositAmount" 
+        v-model.number="amountOfDeposit" 
+        min="0" 
+        step="1000"
+        placeholder="Введите сумму">
+    </div>
+    
+    <div class="input-group">
+      <label for="annualPercent">Годовой процент (%):</label>
+      <input 
+        type="number" 
+        id="annualPercent" 
+        v-model.number="percentPerAnnum" 
+        min="0" 
+        max="100" 
+        step="0.1"
+        placeholder="Введите процент">
+    </div>
+    
+    <div class="input-group">
+      <label>Прибыль в месяц:</label>
+      <div class="result">{{ profitPerMonth }} ₽</div>
+    </div>
+    
+    <div class="input-group">
+      <label>Прибыль в год:</label>
+      <div class="result">{{ profitPerYear }} ₽</div>
+    </div>
   </div>
-  <script src="js/main.js"></script>
+
+  <script>
+    new Vue({
+      el: '#interestCalculator',
+      data: {
+        amountOfDeposit: 100000,
+        percentPerAnnum: 8
+      },
+      computed: {
+        formattedAmount() {
+          return new Intl.NumberFormat('ru-RU').format(this.amountOfDeposit);
+        },
+        percentPerMonth() {
+          if (isNaN(this.percentPerAnnum)) return 0;
+          return (this.percentPerAnnum / 12).toFixed(2);
+        },
+        profitPerMonth() {
+          if (isNaN(this.amountOfDeposit) || isNaN(this.percentPerAnnum)) return 0;
+          const result = this.amountOfDeposit * this.percentPerAnnum / 100 / 12;
+          return result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        },
+        profitPerYear() {
+          if (isNaN(this.amountOfDeposit) || isNaN(this.percentPerAnnum)) return 0;
+          const result = this.amountOfDeposit * this.percentPerAnnum / 100;
+          return result.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+        }
+      }
+    });
+  </script>
 </body>
 </html>
